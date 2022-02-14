@@ -160,7 +160,7 @@ yuv444p12le gbrp12le gray gray10le gray12le
 
 ## Determining the VA-API driver to use
 
-For hardware acceleration to work, the browser may have the driver built-in or you will need a suitable driver, i.e. `ls /usr/lib64/dri/*_drv_video.so`. To be sure run `vainfo` in a terminal window. For AMD try `LIBVA_DRIVER_NAME=r600 vainfo` or `LIBVA_DRIVER_NAME=radeonsi vainfo`. For Intel the `iHD` driver is newer. So check first `LIBVA_DRIVER_NAME=iHD vainfo` or try `LIBVA_DRIVER_NAME=i965 vainfo`.
+For hardware acceleration to work, the browser may have the driver built-in or you will need a suitable driver, i.e. `ls /usr/lib64/dri/*_drv_video.so`. To be sure, run `vainfo` in a terminal window. For AMD try `LIBVA_DRIVER_NAME=r600 vainfo` or `LIBVA_DRIVER_NAME=radeonsi vainfo`. For Intel the `iHD` driver is newer. So check first `LIBVA_DRIVER_NAME=iHD vainfo` or try `LIBVA_DRIVER_NAME=i965 vainfo`.
 
 Below see captured output for the NVIDIA driver.
 
@@ -263,7 +263,7 @@ media.navigator.mediadatadecoder_vpx_enabled   true
 
 ## Chromium installation and configuration
 
-[Chromium](https://dev.chromium.org/Home) is an open-source browser project. Some say it's a browser made for developers. The [chromium-latest-linux](https://github.com/scheib/chromium-latest-linux) repository works great for launching Chromium including VP9 media playback. Unfortunately, the browswer cannot decode H.264-ACC media.
+[Chromium](https://dev.chromium.org/Home) is an open-source browser project. Some say it's a browser made for developers. The [chromium-latest-linux](https://github.com/scheib/chromium-latest-linux) repository works great for launching Chromium including VP9 media playback. Unfortunately, the browser cannot decode H.264-ACC media.
 
 **Installation**
 
@@ -288,7 +288,7 @@ $ cp ~/Downloads/ffmpeg-on-clear-linux/bin/run-chromium-latest ~/bin/.
 
 Scroll down towards the end of the file. Update the value for `LIBVA_DRIVER_NAME` or leave it `auto`. The driver name is overridden automatically for NVIDIA hardware.
 
-Opening new windows may be larger then the initial window. After a while, that can be annoying. The `--window-size=x,y` option resolves this issue. Optionally adjust the width and height (in pixels) appropiate for your display.
+Opening new windows may be larger than the initial window. After a while, that can be annoying. The `--window-size=x,y` option resolves this issue. Optionally adjust the width and height (in pixels) appropriate for your display.
 
 Accelerated 2D canvas is required (default enabled) to decode videos on the GPU. Two more options `--use-gl` and `--enable-features=VaapiVideoDecoder` are needed for hardware acceleration to work when watching a video. Hardware acceleration stopped working in Google Chrome 98. The `--disable-features=UseChromeOSDirectVideoDecoder` option resolves the issue by decoding videos using VDAVideoDecoder.
 
@@ -326,7 +326,7 @@ exec "$EXECCMD" --window-size=1100,900 \
 
 On first launch go into `Settings -> Appearance -> Customize fonts` and change the fonts. Metrically compatible with `Times New Roman`, `Arial`, and `Courier New` are `Tinos`, `Arimo`, and `Cousine` respectively. Optionally go into `Settings -> Advanced -> System` and disable "Use hardware acceleration when available". This may be helpful if the GPU is lacking or you prefer the CPU to decode videos.
 
-A desktop file is created the first time ran and placed in `~/.local/share/applications`. You may run Chromium using the command-line or search for "Chromium" in Application Finder. Launching from the desktop will run the same script.
+A desktop file is created the first time it is run and placed in `~/.local/share/applications`. You may run Chromium using the command-line or search for "Chromium" in Application Finder. Launching from the desktop will run the same script.
 
 ```bash
 $ ~/bin/run-chromium-latest
@@ -342,7 +342,7 @@ The `RPM` file for Google Chrome can be found at [Google](https://www.google.com
 
 **Note:** Installing Google Chrome will add the Google repository so your system will automatically keep Google Chrome up to date. If you don't want Google's repository (which is what we want), do `sudo touch /etc/default/google-chrome` before installing the package. The reason is the package will fail auto-install without the `--nodeps` flag.
 
-The `-U` flag to `rpm` installs the newly package, otherwise upgrades the installed package. Periodically, obtain the current stable release and run the `rpm` command as shown.
+The `-U` flag to `rpm` installs the new package, otherwise upgrades the installed package. Periodically, obtain the current stable release and run the `rpm` command as shown.
 
 ```bash
 $ sudo mkdir -p /etc/default && sudo touch /etc/default/google-chrome
@@ -388,7 +388,7 @@ The `RPM` file for Vivaldi can be found at [Vivaldi](https://vivaldi.com/downloa
 
 **Note:** Installing Vivaldi will add the Vivaldi repository so your system will automatically keep Vivaldi up to date. If you don't want Vivaldi's repository (which is what we want), do `sudo touch /etc/default/vivaldi` before installing the package. The reason is the package will fail auto-install without the `--nodeps` flag.
 
-The `-U` flag to `rpm` installs the newly package, otherwise upgrades the installed package. Periodically, obtain the current stable release and run the `rpm` command as shown.
+The `-U` flag to `rpm` installs the new package, otherwise upgrades the installed package. Periodically, obtain the current stable release and run the `rpm` command as shown.
 
 ```bash
 $ sudo mkdir -p /etc/default && sudo touch /etc/default/vivaldi
@@ -430,7 +430,7 @@ The `RPM` file for Brave can be found at [sourceforge.net](https://sourceforge.n
 
 **Note:** Installing Brave will add the Brave repository so your system will automatically keep Brave up to date. If you don't want Brave's repository (which is what we want), do `sudo touch /etc/default/brave-browser` before installing the package. The reason is the package will fail auto-install without the `--nodeps` flag.
 
-The `-U` flag to `rpm` installs the newly package, otherwise upgrades the installed package. Periodically, obtain the current stable release and run the `rpm` command as shown.
+The `-U` flag to `rpm` installs the new package, otherwise upgrades the installed package. Periodically, obtain the current stable release and run the `rpm` command as shown.
 
 ```bash
 $ sudo mkdir -p /etc/default && sudo touch /etc/default/brave-browser
@@ -464,7 +464,7 @@ $ ~/bin/run-brave-stable
 
 ## Caveat with RPM package installation
 
-It feels hacky in Clear Linux installing a package that was built for another platform such as RedHat. For piece of mind, check for missing library dependencies using the `ldd` utility. Ensure nothing is missing in the output. If true, then install missing packages with `sudo swupd bundle-add PKGNAME`. Run `sudo swupd search LIBNAME` if needed.
+It feels hacky in Clear Linux installing a package that was built for another platform such as RedHat. For peace of mind, check for missing library dependencies using the `ldd` utility. Ensure nothing is missing in the output. If true, then install missing packages with `sudo swupd bundle-add PKGNAME`. Run `sudo swupd search LIBNAME` if needed.
 
 Another solution is building from source. This is likely not necessary, although becomes reality if unable to meet library dependencies. Uninstall the browser with `sudo rpm -e NAME`, given below.
 
@@ -475,7 +475,7 @@ $ ldd /opt/google/chrome/chrome 2>/dev/null | grep "not found$"
 $ ldd /opt/vivaldi/vivaldi-bin 2>/dev/null | grep "not found$"
 ```
 
-Hackiness aside, a benefit of using a package for installation is that the package can be uninstalled easily. Optionally remove your browser data and settings. Though, be sure to export your bookmarks.
+Hackiness put aside, a benefit of using a package for installation is that the package can be uninstalled easily. Optionally remove your browser data and settings. Though, be sure to export your bookmarks.
 
 ```bash
 # Brave
