@@ -200,8 +200,9 @@ LIBVA_DRIVERS_PATH=/usr/local/lib/dri:/usr/lib64/dri
 Note that this requires enabling modeset for the `nvidia-drm` module, or else it won't load. Reboot for the change to take effect.
 
 ```bash
-$ sudo mkdir -p /etc/modprobe.d && \
-  sudo tee /etc/modprobe.d/enable-nvidia-modeset.conf >/dev/null <<'EOF'
+$ sudo mkdir -p /etc/modprobe.d
+
+$ sudo tee /etc/modprobe.d/enable-nvidia-modeset.conf >/dev/null <<'EOF'
 options nvidia-drm modeset=1
 EOF
 ```
