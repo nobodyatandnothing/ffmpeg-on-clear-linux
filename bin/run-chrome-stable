@@ -22,9 +22,6 @@ then
     # libva doesn't yet know which driver to load for the nvidia-drm driver
     # this forces libva to load the nvidia backend
     export LIBVA_DRIVER_NAME=nvidia
-
-    # browsers based on chromium support VDPAU acceleration
-    export VDPAU_DRIVER=nvidia
 fi
 
 [[ $XDG_SESSION_TYPE == wayland ]] && GL=egl || GL=desktop
