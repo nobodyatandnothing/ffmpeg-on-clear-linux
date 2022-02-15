@@ -10,7 +10,7 @@ Run [FFmpeg](https://ffmpeg.org/) on [Clear Linux](https://clearlinux.org/) incl
 * [Determining the VA-API driver to use](#determining-the-va-api-driver-to-use)
 * [Using the NVIDIA NVDEC-enabled VA-API driver](#using-the-nvidia-nvdec-enabled-va-api-driver)
 * [Firefox config file](#firefox-config-file)
-* [Firefox settings](#firefox-settings)
+* [Review Firefox settings](#review-firefox-settings)
 * [Chromium installation and configuration](#chromium-installation-and-configuration)
 * [Google Chrome installation and run script](#google-chrome-installation-and-run-script)
 * [Vivaldi installation and run script](#vivaldi-installation-and-run-script)
@@ -281,7 +281,7 @@ export MOZ_USE_XINPUT2=1
 export MOZ_WEBRENDER=1
 ```
 
-## Firefox settings
+## Review Firefox settings
 
 Below are the minimum settings applied via `about:config` to enable hardware acceleration. The `media.rdd-ffmpeg.enable` flag must be enabled for h264ify to work along with VP9. Basically, this allows you to choose to play videos via the h264ify extension or VP9 media by disabling h264ify and enjoy beyond 1080P playback.
 
