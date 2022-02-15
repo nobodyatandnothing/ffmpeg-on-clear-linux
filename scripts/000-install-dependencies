@@ -18,7 +18,6 @@ for bundle_name in \
     devpkg-mesa devpkg-numactl devpkg-opus devpkg-pulseaudio      \
     devpkg-SDL2 devpkg-SDL2_gfx devpkg-SDL2_image devpkg-SDL2_net \
     devpkg-SDL2_ttf devpkg-speex devpkg-v4l-utils devpkg-zlib     \
-    devpkg-gst-plugins-bad \
 ;do
     if [[ ! ${installed_bundles} =~ " - ${bundle_name} " ]]; then
         add_list="${add_list} ${bundle_name}"
@@ -26,6 +25,15 @@ for bundle_name in \
         count=$(( ${count} + 1 ))
     fi
 done
+
+# Required bundle for building the NVIDIA NVDEC-enabled VA-API driver.
+if [[ -f /opt/nvidia/bin/nvidia-settings ]]; then
+    if [[ ! ${installed_bundles} =~ " - devpkg-gst-plugins-bad " ]]; then
+        add_list="${add_list} devpkg-gst-plugins-bad"
+    else
+        count=$(( ${count} + 1 ))
+    fi
+fi
 
 if [[ -n ${add_list} ]]; then
     add_list=${add_list## } # remove leading whitespace
