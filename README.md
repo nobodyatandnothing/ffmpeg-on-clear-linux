@@ -1,5 +1,7 @@
 # ffmpeg-on-clear-linux
 
+*This is no longer actively maintained and kept here for reference.*
+
 Run [FFmpeg](https://ffmpeg.org/) on [Clear Linux](https://clearlinux.org/) including H.264 and VP9 playback on the GPU.
 
 * [What's included](#whats-included)
