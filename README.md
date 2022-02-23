@@ -46,9 +46,9 @@ sudo bash build-all
 Or become root and run each script individually. If choosing this path, be sure to run `000-install-dependencies` first. Various scripts exit silently depending on whether `/opt/nvidia/bin/nvidia-settings` or `/usr/local/cuda/cuda.h` exists.
 
 ```bash
-$ sudo root
-
+sudo root
 cd scripts
+
 ./000-install-dependencies
 ./100-build-nv-codec-headers
 ./110-build-libvdpau
