@@ -4,6 +4,7 @@ This guide is for folks using the NVIDIA proprietary driver.
 
 * [Requirements](#requirements)
 * [CUDA preparation](#cuda-preparation)
+* [Enable Service File](#enable-service)
 * [Using the NVIDIA NVDEC-enabled VA-API driver](#nvdec-driver)
 
 ### <a id="requirements">Requirements
@@ -37,6 +38,8 @@ Until CUDA reaches full compatibility with GCC 11.x, install the `c-extras-gcc10
 ```bash
 $ sudo swupd bundle-add c-extras-gcc10
 ```
+
+### <a id="enable-service">Enable service file
 
 The `swupd` tool is not yet mindful of the NVIDIA proprietary installation. Create a systemd service unit to overwrite the Clear Linux OS provided libGL files. The service accommodates the NVIDIA 64-bit libs residing in `/opt/nvidia/lib64` or `/opt/nvidia/lib`.
 
