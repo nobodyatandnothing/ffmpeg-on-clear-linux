@@ -4,7 +4,7 @@ This guide is for folks using the NVIDIA proprietary driver.
 
 * [Requirements](#requirements)
 * [CUDA preparation](#cuda-preparation)
-* [Enable Service File](#enable-service)
+* [Enable service file](#enable-service)
 * [Using the NVIDIA NVDEC-enabled VA-API driver](#nvdec-driver)
 
 ### <a id="requirements">Requirements
