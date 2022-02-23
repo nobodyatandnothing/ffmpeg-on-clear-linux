@@ -31,7 +31,7 @@ scripts    Contains individual build-install scripts.
 
 ### <a id="requirements">Initial requirements and preparation
 
-Important, see [guide](doc/NV-Requirements-And-Preparation.md) if using the NVIDIA proprietary driver. For CUDA support in FFmpeg, be sure to install the `c-extras-gcc10` bundle if the base `gcc --version` is later than 10.
+Important, see [guide](doc/NV-Requirements-And-Preparation.md) in doc folder if using the NVIDIA proprietary driver. For CUDA support in FFmpeg, be sure to install the `c-extras-gcc10` bundle if the base `gcc --version` is later than 10.
 
 ### <a id="building">Building and installation
 
@@ -118,11 +118,11 @@ vainfo: Supported profile and entrypoints
 
 ### <a id="firefox">Firefox config file and settings
 
-See [guide](doc/Firefox-Config-File-And-Settings.md) found in the doc folder. Be sure to review and compare settings in Firefox, particularly `media.rdd-process.enabled`. Leave enabled or the NVDEC-enabled VA-API driver will not work.
+See [guide](doc/Firefox-Config-File-And-Settings.md) in doc folder. Be sure to review and compare settings in Firefox, particularly `media.rdd-process.enabled`. Leave enabled or the NVDEC-enabled VA-API driver will not work.
 
 ### <a id="chromium-and-others">Chromium and others installation
 
-See [guide](doc/Chromium-And-Others-Installation.md) found in the doc folder. This covers Chromium, Google Chrome, Vivaldi, and Brave.
+See [guide](doc/Chromium-And-Others-Installation.md) in doc folder. This covers Chromium, Google Chrome, Vivaldi, and Brave.
 
 ### <a id="verify-acceleration">How can I make sure hardware acceleration is working?
 
@@ -134,7 +134,7 @@ In Firefox, check the `about::support` page. In Chromium, Google Chrome, Vivaldi
 
 ### <a id="watch-hdr-videos">Watch HDR videos
 
-To play HDR videos, see `youtube-play` found in the extras folder.
+To play HDR videos, see `youtube-play` in extras folder.
 
 ### <a id="advert">See also, advert at Clear Linux
 
