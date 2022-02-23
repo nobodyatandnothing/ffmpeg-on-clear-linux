@@ -39,6 +39,19 @@ if [[ -d ${name} ]]; then
         vdpau=""
     fi
 
+    # Enable Vulkan; doable since Clear Linux 35930 (developer-gpu).
+    if [[ -f /usr/include/glslang/SPIRV/GlslangToSpv.h ]]; then
+        # Prune glslang libflags from the configure script.
+        sed -i \
+            -e "s|-lMachineIndependent ||" \
+            -e "s|-lOSDependent ||"        \
+            -e "s|-lOGLCompiler ||"        \
+            -e "s|-lGenericCodeGen ||" configure
+        vulkan="--enable-vulkan --enable-libglslang"
+    else
+        vulkan=""
+    fi
+
     ./configure \
         --prefix=/usr/local \
         --extra-cflags="-I/usr/local/include" \
@@ -56,7 +69,7 @@ if [[ -d ${name} ]]; then
         --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 \
         --enable-libxcb --enable-libxcb-shape --enable-libxcb-shm \
         --enable-libxcb-xfixes --enable-libxml2 --enable-libxvid \
-        --enable-opengl --enable-postproc --enable-sdl2 --enable-vaapi $vdpau \
+        --enable-opengl --enable-postproc --enable-sdl2 --enable-vaapi $vdpau $vulkan \
         --enable-zlib --enable-ffplay --enable-gpl --enable-nonfree \
         --enable-version3 || exit $?
 

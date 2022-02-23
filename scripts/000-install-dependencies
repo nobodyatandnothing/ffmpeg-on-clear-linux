@@ -26,13 +26,23 @@ for bundle_name in \
     fi
 done
 
-# Required bundle for building the NVIDIA NVDEC-enabled VA-API driver.
+# Add bundle for building the NVIDIA NVDEC-enabled VA-API driver.
 if [[ -f /opt/nvidia/bin/nvidia-settings ]]; then
     if [[ ! ${installed_bundles} =~ " - devpkg-gst-plugins-bad " ]]; then
         add_list="${add_list} devpkg-gst-plugins-bad"
     else
         count=$(( ${count} + 1 ))
     fi
+fi
+
+# Buidling FFmpeg with flags "--enable-vulkan --enable-libglslang"
+# requires glslang and vulkan header files provided by developer-gpu.
+# Add bundle optionally due to missing glslang headers in CL <= 35920.
+if [[ ! ${installed_bundles} =~ " - developer-gpu " ]]; then
+    osrel=$( grep VERSION_ID /etc/os-release | cut -f2 -d= )
+    [[ $osrel -ge 35730 ]] && add_list="${add_list} developer-gpu"
+else
+    count=$(( ${count} + 1 ))
 fi
 
 if [[ -n ${add_list} ]]; then
