@@ -74,6 +74,8 @@ Supported pixel formats: yuv420p yuvj420p yuv422p yuvj422p yuv444p yuvj444p
 nv12 nv16 nv21 yuv420p10le yuv422p10le yuv444p10le nv20le gray gray10le
 ```
 
+The `x264` binary is not compiled with `lavf` (i.e. libavformat part of FFmpeg), `avs`, and `swscale` support as that would introduce a circular dependency. Instead, please refer to FFmpeg's [bindings](https://ffmpeg.org/ffmpeg-all.html#libx264_002c-libx264rgb) for libx264 options. You can specify an `x264` option with `-x264-params` in case there's no native FFmpeg binding available. See also, FFmpeg's beginner-friendly [guide](https://trac.ffmpeg.org/wiki/Encode/H.264) for H.264.
+
 Similarly x265 supports 8-bits, 10-bits and 12-bits output.
 
 ```bash
@@ -85,6 +87,8 @@ Supported pixel formats: yuv420p yuvj420p yuv422p yuvj422p yuv444p yuvj444p
 gbrp yuv420p10le yuv422p10le yuv444p10le gbrp10le yuv420p12le yuv422p12le
 yuv444p12le gbrp12le gray gray10le gray12le
 ```
+
+Please refer to FFmpeg's [bindings](https://ffmpeg.org/ffmpeg-all.html#libx265) for libx265 options. You can specify an `x265` option with `-x265-params`. See also, FFmpeg's beginner-friendly [guide](https://trac.ffmpeg.org/wiki/Encode/H.265) for H.265.
 
 ### <a id="va-api-driver">Determining the VA-API driver to use
 
