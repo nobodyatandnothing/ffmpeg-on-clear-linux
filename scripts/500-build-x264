@@ -25,7 +25,7 @@ if [[ -d ${name} ]]; then
 
     ./configure --prefix=/usr/local --extra-cflags="-I/usr/local/include" \
         --extra-ldflags="-L/usr/local/lib" --enable-lto --enable-shared \
-        --enable-pic --enable-strip --disable-lavf --disable-swscale \
+        --enable-pic --enable-strip --disable-lavf --disable-avs --disable-swscale \
         --disable-ffms --disable-opencl --disable-cli --bit-depth=10 && \
     make -j ${cores} || exit $?
     make install || exit $?
@@ -41,7 +41,7 @@ if [[ -d ${name} ]]; then
 
     ./configure --prefix=/usr/local --extra-cflags="-I/usr/local/include" \
         --extra-ldflags="-L/usr/local/lib" --enable-lto --enable-shared \
-        --enable-pic --enable-strip --disable-lavf --disable-swscale \
+        --enable-pic --enable-strip --disable-lavf --disable-avs --disable-swscale \
         --disable-ffms --disable-opencl && \
     make -j ${cores} && make install
 fi
