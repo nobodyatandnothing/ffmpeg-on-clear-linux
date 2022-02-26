@@ -82,12 +82,16 @@ media.ffvpx.enabled                            false
 Enable to help get decoding to work for NVIDIA 470 driver series.
 widget.dmabuf.force-enabled                    true
 
-Verify enabled, necessary for the nvidia-nvdec enabled driver to work.
+Verify enabled, necessary for the NVIDIA-NVDEC enabled driver to work.
 media.rdd-process.enabled                      true
 
 media.rdd-ffmpeg.enabled                       true
 media.rdd-ffvpx.enabled                        false
 media.rdd-vpx.enabled                          false
+
+Enable for Intel graphics. Enable also for NVIDIA 3000+ series graphics
+using proprietary driver (v510+) and NVIDIA-NVDEC enabled VA-API driver
+(v0.0.5+).
 media.av1.enabled                              false
 
 Enable FFMPEG VA-API decoding support for WebRTC on Linux.

@@ -4,7 +4,7 @@ This guide is for folks using the NVIDIA proprietary driver.
 
 * [Requirements](#requirements)
 * [CUDA preparation](#cuda-preparation)
-* [Enable service file](#enable-service)
+* [Add service handler](#add-service-handler)
 * [Using the NVIDIA NVDEC-enabled VA-API driver](#nvdec-driver)
 
 ### <a id="requirements">Requirements
@@ -39,7 +39,7 @@ Until CUDA reaches full compatibility with GCC 11.x, install the `c-extras-gcc10
 $ sudo swupd bundle-add c-extras-gcc10
 ```
 
-### <a id="enable-service">Enable service file
+### <a id="add-service-handler">Add service handler
 
 The `swupd` tool is not yet mindful of the NVIDIA proprietary installation. Create a systemd service unit to overwrite the Clear Linux OS provided libGL files. The service accommodates the NVIDIA 64-bit libs residing in `/opt/nvidia/lib64` or `/opt/nvidia/lib`.
 
@@ -125,5 +125,23 @@ vainfo: Supported profile and entrypoints
       VAProfileHEVCMain               : VAEntrypointVLD
       VAProfileVP8Version0_3          : VAEntrypointVLD
       VAProfileVP9Profile0            : VAEntrypointVLD
+```
+
+For NVIDIA 3000+ series graphics, optionally enable AV1 in Firefox only if AV1
+is mentioned in the output. However, it requires minimally propietary driver
+v510+ and the NVIDIA-NVDEC enabled VA-API driver v0.0.5+.
+
+Update `~/.config/firefox.conf` and ensure the value for `LIBVA_DRIVERS_PATH`
+points to `/usr/local/lib/dri`. This one decodes using the NVDEC engine.
+
+```text
+export LIBVA_DRIVERS_PATH=/usr/local/lib/dri
+```
+
+Enable AV1 in Firefox settings via `about:config` only if your graphics
+support it and meet the minimum requirements.
+
+```text
+media.av1.enabled                              true
 ```
 
