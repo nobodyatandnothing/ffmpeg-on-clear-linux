@@ -136,6 +136,8 @@ In Firefox, check the `about::support` page. In Chromium, Google Chrome, Vivaldi
 2. `sudo intel_gpu_top` to check if percentage under the "Video" section goes up
 3. `watch -n 1 sudo intel_gpu_frequency` to check if the frequency goes up
 
+Depending on the quality of the video (i.e. 1080p60 or lesser), the video codec may sometimes not decode on the GPU. For example AV1 codec. A workaround is to try installing the `enhanced-h264ify` extension to make YouTube stream H.264 videos instead, but also allow VP8/VP9 via the extension settings.
+
 ### <a id="watch-hdr-videos">Watch HDR videos
 
 To play HDR videos, see `youtube-play` in extras folder.
