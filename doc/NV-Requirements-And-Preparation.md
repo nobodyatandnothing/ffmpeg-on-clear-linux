@@ -18,17 +18,20 @@ cudaarch="compute_75"  # Turing
 cudacode="sm_75"
 ```
 
-Optionally enable `ForceCompositionPipeline` for a better desktop experience, especially when moving-resizing a terminal window while playing a video. This can be done at the device level by adding-or-editing a file `/etc/X11/xorg.conf.d/nvidia-device.conf`. Replace `MODEL_STRING` with your actual GPU model (i.e. GTX 1660). Finally reboot for the change to take effect.
+Optionally enable `ForceCompositionPipeline` for a smoother desktop experience (no more stutters), especially when moving-resizing a terminal window while playing a video. This can be done at the device level; for example `/etc/X11/xorg.conf.d/nvidia-device.conf`.
 
-```text
+```bash
+sudo mkdir -p /etc/X11/xorg.conf.d
+
+sudo tee /etc/X11/xorg.conf.d/nvidia-device.conf >/dev/null <<'EOF'
+options nvidia-drm modeset=1
 Section "Device"
     Identifier    "Device0"
     Driver        "nvidia"
-    VendorName    "NVIDIA Corporation"
-    BoardName     "GeForce MODEL_STRING"
     Option        "ForceCompositionPipeline" "On"
     Option        "ForceFullCompositionPipeline" "On"
 EndSection
+EOF
 ```
 
 ### <a id="cuda-preparation">CUDA preparation
@@ -36,7 +39,7 @@ EndSection
 Until CUDA reaches full compatibility with GCC 11.x, install the `c-extras-gcc10` bundle. This applies if `gcc --version` returns 11 or later. A flag will be passed to `nvcc` to use `gcc-10`.
 
 ```bash
-$ sudo swupd bundle-add c-extras-gcc10
+sudo swupd bundle-add c-extras-gcc10
 ```
 
 ### <a id="add-service-handler">Add service handler
@@ -46,7 +49,7 @@ The `swupd` tool is not yet mindful of the NVIDIA proprietary installation. Crea
 Running `swupd bundle-add devpkg-libva` or `devpkg-mediasdk` or `devpkg-mesa` restores the Clear Linux OS provided libGL files which breaks the NVIDIA installation. The service removes libGL files that shouldn't be there i.e. `libEGL.so*`, `libGLESv1_CM.so*`, `libGLESv2.so*`, and `libGL.so*`.
 
 ```bash
-$ sudo tee /etc/systemd/system/fix-nvidia-libGL-trigger.service >/dev/null <<'EOF'
+sudo tee /etc/systemd/system/fix-nvidia-libGL-trigger.service >/dev/null <<'EOF'
 [Unit]
 Description=Fixes libGL symlinks for the NVIDIA proprietary driver
 BindsTo=update-triggers.target
@@ -64,22 +67,22 @@ EOF
 Reload the systemd manager configuration to pickup the new serivce.
 
 ```bash
-$ sudo systemctl daemon-reload
+sudo systemctl daemon-reload
 ```
 
 Add the service as a dependency to the Clear Linux OS updates trigger causing the service to run after every `swupd bundle-add` and `swupd update`.
 
 ```bash
-$ sudo systemctl add-wants update-triggers.target fix-nvidia-libGL-trigger.service
+sudo systemctl add-wants update-triggers.target fix-nvidia-libGL-trigger.service
 ```
 
 Run the service manually and subsequently get the status about the service.
 
 ```bash
-$ sudo systemctl start fix-nvidia-libGL-trigger.service
+sudo systemctl start fix-nvidia-libGL-trigger.service
 
-$ systemctl status fix-nvidia-libGL-trigger.service
-$ journalctl -xeu fix-nvidia-libGL-trigger.service
+systemctl status fix-nvidia-libGL-trigger.service
+journalctl -xeu fix-nvidia-libGL-trigger.service
 ```
 
 ### <a id="nvdec-driver">Using the NVIDIA NVDEC-enabled VA-API driver
@@ -93,9 +96,9 @@ LIBVA_DRIVERS_PATH=/usr/local/lib/dri:/usr/lib64/dri
 Note that this requires enabling modeset for the `nvidia-drm` module, or else it won't load. Reboot for the change to take effect.
 
 ```bash
-$ sudo mkdir -p /etc/modprobe.d
+sudo mkdir -p /etc/modprobe.d
 
-$ sudo tee /etc/modprobe.d/enable-nvidia-modeset.conf >/dev/null <<'EOF'
+sudo tee /etc/modprobe.d/enable-nvidia-modeset.conf >/dev/null <<'EOF'
 options nvidia-drm modeset=1
 EOF
 ```
@@ -104,7 +107,6 @@ Below see capture output using the NVDEC-enabled driver.
 
 ```bash
 $ LIBVA_DRIVERS_PATH=/usr/local/lib/dri LIBVA_DRIVER_NAME=nvidia vainfo
-
 libva info: VA-API version 1.11.0
 libva info: User environment variable requested driver 'nvidia'
 libva info: Trying to open /usr/local/lib/dri/nvidia_drv_video.so

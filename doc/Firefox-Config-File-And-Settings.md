@@ -53,7 +53,7 @@ export MOZ_WEBRENDER=1
 
 ### <a id="settings">Review Firefox settings
 
-Below are the minimum settings applied via `about:config` to enable hardware acceleration. The `media.rdd-ffmpeg.enable` flag must be enabled for h264ify to work along with VP9. Basically, this allows you to choose to play videos via the h264ify extension or VP9 media by disabling h264ify and enjoy beyond 1080P playback.
+Below are the minimum settings applied via `about:config` to enable hardware acceleration. The `media.rdd-ffmpeg.enable` flag must be enabled for h264ify or enhanced-h264ify to work along with VP9. Basically, this allows you to choose to play videos via the h264ify extension or VP9 media by disabling h264ify and enjoy beyond 1080P playback.
 
 ```text
 gfx.canvas.azure.accelerated                   true
@@ -61,10 +61,8 @@ gfx.webrender.all                              true
 gfx.webrender.enabled                          true
 
 Enable software render if you want to render on the CPU instead of GPU.
-This is helpful for NVIDIA graphics if you prefer the desktop to remain
-fluid while watching a video, which the GPU is handling along with
-desktop composition. For Intel graphics, leave this setting false
-since webrender on the GPU is needed to decode videos in hardware.
+Preferably, leave this setting false since webrender on the GPU is needed
+to decode videos in hardware.
 gfx.webrender.software                         false
 
 Do not add xrender if missing or set to false or click on the trash icon.
@@ -79,23 +77,22 @@ media.ffmpeg.vaapi-drm-display.enabled         true
 media.ffmpeg.vaapi.enabled                     true
 media.ffvpx.enabled                            false
 
-Enable to help get decoding to work for NVIDIA 470 driver series.
-widget.dmabuf.force-enabled                    true
-
 Verify enabled, necessary for the NVIDIA-NVDEC enabled driver to work.
 media.rdd-process.enabled                      true
 
 media.rdd-ffmpeg.enabled                       true
-media.rdd-ffvpx.enabled                        false
 media.rdd-vpx.enabled                          false
 
-Enable for Intel graphics. Enable also for NVIDIA 3000+ series graphics
-using proprietary driver (v510+) and NVIDIA-NVDEC enabled VA-API driver
-(v0.0.5+).
+Enable for NVIDIA 3000+ series graphics using proprietary driver
+(v510+) and NVIDIA-NVDEC enabled VA-API driver (v0.0.5+).
+Enable also for Intel graphics supporting AV1 decoding.
 media.av1.enabled                              false
 
 Enable FFMPEG VA-API decoding support for WebRTC on Linux.
 media.navigator.mediadatadecoder_vpx_enabled   true
+
+Enable to help get decoding to work for NVIDIA 470 driver series.
+widget.dmabuf.force-enabled                    true
 ```
 
 ### <a id="wikis">See also, wikis at Arch Linux
