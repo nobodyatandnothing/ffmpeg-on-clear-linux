@@ -10,7 +10,7 @@ Run [FFmpeg](https://ffmpeg.org/) on [Clear Linux](https://clearlinux.org/) incl
 * [Firefox config file and settings](#firefox)
 * [Chromium and others installation](#chromium-and-others)
 * [How can I make sure hardware acceleration is working?](#verify-acceleration)
-* [Watch HDR videos](#watch-hdr-videos)
+* [Watch HDR content](#watch-hdr-content)
 * [See also](#advert)
 
 ### <a id="whats-included">What's included
@@ -136,9 +136,9 @@ In Firefox, check the `about::support` page. In Chromium, Google Chrome, Vivaldi
 
 Depending on the quality of the video (i.e. 1080p60 or lesser), the video codec may sometimes not decode on the GPU. For example AV1 codec. A workaround is to try installing the `enhanced-h264ify` extension to make YouTube stream H.264 videos instead, but also allow VP8/VP9 via the extension settings.
 
-### <a id="watch-hdr-videos">Watch HDR videos
+### <a id="watch-hdr-content">Watch HDR content
 
-To play HDR videos, see `youtube-play` in extras folder.
+To play HDR content, see `youtube-play` inside the extras folder.
 
 ### <a id="advert">See also, advert at Clear Linux
 
