@@ -87,11 +87,7 @@ journalctl -xeu fix-nvidia-libGL-trigger.service
 
 ### <a id="nvdec-driver">Using the NVIDIA NVDEC-enabled VA-API driver
 
-The NVDEC-enabled VA-API driver (see the official [Github](https://github.com/elFarto/nvidia-vaapi-driver)) is compiled automatically if your NVIDIA display driver is greater than 470.57, but it is not enabled by default as it is still experimental. The implementation is specifically designed to be used by Firefox. To use it, change `LIBVA_DRIVERS_PATH` mentioned in the Firefox configuration to point to `/usr/local/lib/dri` first.
-
-```bash
-LIBVA_DRIVERS_PATH=/usr/local/lib/dri:/usr/lib64/dri
-```
+The NVDEC-enabled VA-API driver (see the official [Github](https://github.com/elFarto/nvidia-vaapi-driver)) is compiled automatically if your NVIDIA display driver is greater than 470.57. The implementation is specifically designed to be used by Firefox.
 
 Note that this requires enabling modeset for the `nvidia-drm` module, or else it won't load. Reboot for the change to take effect.
 
@@ -106,13 +102,13 @@ EOF
 Below see capture output using the NVDEC-enabled driver.
 
 ```bash
-$ LIBVA_DRIVERS_PATH=/usr/local/lib/dri LIBVA_DRIVER_NAME=nvidia vainfo
-libva info: VA-API version 1.11.0
-libva info: User environment variable requested driver 'nvidia'
-libva info: Trying to open /usr/local/lib/dri/nvidia_drv_video.so
+$ LIBVA_DRIVERS_PATH=/usr/local/lib/dri LIBVA_DRIVER_NAME=nvdec vainfo
+libva info: VA-API version 1.13.0
+libva info: User environment variable requested driver 'nvdec'
+libva info: Trying to open /usr/local/lib/dri/nvdec_drv_video.so
 libva info: Found init function __vaDriverInit_1_0
 libva info: va_openDriver() returns 0
-vainfo: VA-API version: 1.11 (libva 2.11.0)
+vainfo: VA-API version: 1.13 (libva 2.13.0)
 vainfo: Driver version: VA-API NVDEC driver
 vainfo: Supported profile and entrypoints
       VAProfileMPEG2Simple            : VAEntrypointVLD
@@ -133,17 +129,7 @@ For NVIDIA 3000+ series graphics, optionally enable AV1 in Firefox only if AV1
 is mentioned in the output. However, it requires minimally propietary driver
 v510+ and the NVIDIA-NVDEC enabled VA-API driver v0.0.5+.
 
-Update `~/.config/firefox.conf` and ensure the value for `LIBVA_DRIVERS_PATH`
-points to `/usr/local/lib/dri`. This one decodes using the NVDEC engine.
-
 ```text
-export LIBVA_DRIVERS_PATH=/usr/local/lib/dri
-```
-
-Enable AV1 in Firefox settings via `about:config` only if your graphics
-support it and meet the minimum requirements.
-
-```text
-media.av1.enabled                              true
+media.av1.enabled                     true
 ```
 

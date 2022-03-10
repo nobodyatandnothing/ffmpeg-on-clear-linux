@@ -19,21 +19,15 @@ export LIBVA_DRIVER_NAME=auto
 
 if [[ -d /opt/nvidia ]]
 then
-    # vdpau-va-driver-v9 (default VA-API driver)
-    nv_va_path1=/usr/lib64/dri/nvidia_drv_video.so
+    # add /opt/nvidia/{lib64,lib} to path
+    export LD_LIBRARY_PATH="/opt/nvidia/lib64:/opt/nvidia/lib:$LD_LIBRARY_PATH"
 
-    # nvidia-vaapi-driver (decodes using the NVDEC engine on the GPU)
-    # change LIBVA_DRIVERS_PATH above to /usr/local/lib/dri:/usr/lib64/dri
-    nv_va_path2=/usr/local/lib/dri/nvidia_drv_video.so
-
-    if [[ -f $nv_va_path1 || -f $nv_va_path2 ]]
-    then
-        # add /opt/nvidia/{lib64,lib} to path
-        export LD_LIBRARY_PATH="/opt/nvidia/lib64:/opt/nvidia/lib:$LD_LIBRARY_PATH"
-
-        # libva doesn't yet know which driver to load for the nvidia-drm driver
-        # this forces libva to load the nvidia backend
-        export LIBVA_DRIVER_NAME=nvidia
+    # libva doesn't yet know which driver to load for the nvidia-drm driver
+    # this forces libva to load the nvdec backend by default
+    if [[ -f /usr/local/lib/dri/nvdec_drv_video.so ]]; then
+        export LIBVA_DRIVER_NAME=nvdec
+    else
+        export LIBVA_DRIVER_NAME=vdpau
     fi
 fi
 

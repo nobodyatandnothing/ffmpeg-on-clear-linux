@@ -95,14 +95,15 @@ For hardware acceleration to work, the browser may have the driver built-in or y
 Below see captured output for the NVIDIA driver.
 
 ```bash
-$ LIBVA_DRIVER_NAME=nvidia vainfo
+$ LIBVA_DRIVER_NAME=nvidia vainfo   # nvidia is a symbolic link to vdpau
+$ LIBVA_DRIVER_NAME=vdpau  vainfo
 
-libva info: VA-API version 1.11.0
-libva info: User environment variable requested driver 'nvidia'
-libva info: Trying to open /usr/lib64/dri/nvidia_drv_video.so
-libva info: Found init function __vaDriverInit_1_11
+libva info: VA-API version 1.13.0
+libva info: User environment variable requested driver 'vdpau'
+libva info: Trying to open /usr/lib64/dri/vdpau_drv_video.so
+libva info: Found init function __vaDriverInit_1_13
 libva info: va_openDriver() returns 0
-vainfo: VA-API version: 1.11 (libva 2.11.0)
+vainfo: VA-API version: 1.13 (libva 2.13.0)
 vainfo: Driver version: Splitted-Desktop Systems VDPAU backend for VA-API - 0.7.4
 vainfo: Supported profile and entrypoints
       VAProfileMPEG2Simple            : VAEntrypointVLD

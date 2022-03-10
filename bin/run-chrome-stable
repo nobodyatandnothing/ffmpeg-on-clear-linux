@@ -21,7 +21,7 @@ then
 
     # libva doesn't yet know which driver to load for the nvidia-drm driver
     # this forces libva to load the nvidia backend
-    export LIBVA_DRIVER_NAME=nvidia
+    export LIBVA_DRIVER_NAME=vdpau
 fi
 
 [[ $XDG_SESSION_TYPE == wayland ]] && GL=egl || GL=desktop

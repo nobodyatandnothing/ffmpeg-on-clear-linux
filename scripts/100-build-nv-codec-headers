@@ -11,18 +11,8 @@ version=`echo $version | cut -d. -f1-2` # want major and minor, not revision
 
 if   [[ $(bc -l <<< "${version} >= 470.57") -eq 1 ]]; then
     nvver="11.1.5.1"
-elif [[ $(bc -l <<< "${version} >= 455.28") -eq 1 ]]; then
-    nvver="11.0.10.0"
-elif [[ $(bc -l <<< "${version} >= 445.87") -eq 1 ]]; then
-    nvver="10.0.26.1"
-elif [[ $(bc -l <<< "${version} >= 435.21") -eq 1 ]]; then
-    nvver="9.1.23.2"
-elif [[ $(bc -l <<< "${version} >= 418.30") -eq 1 ]]; then
-    nvver="9.0.18.4"
-elif [[ $(bc -l <<< "${version} >= 410.48") -eq 1 ]]; then
-    nvver="8.2.15.11"
 else
-    echo "Warning: NVIDIA graphics driver is older than 410.48, skipping build..."
+    echo "Warning: NVIDIA graphics driver is older than 470.57, skipping build..."
     exit 0
 fi
 
@@ -39,6 +29,7 @@ tar xzf nv-codec-headers-${nvver}.tar.gz
 
 if [[ -d nv-codec-headers-${nvver} ]]; then
     cd nv-codec-headers-${nvver}
-    make PREFIX=/usr/local && make install
+    make PREFIX=/usr/local && \
+    make install
 fi
 

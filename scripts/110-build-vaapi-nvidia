@@ -8,12 +8,14 @@ version=`/opt/nvidia/bin/nvidia-settings --version | grep version`
 version=${version##* } # extract the version string from the line
 version=`echo $version | cut -d. -f1-2` # want major and minor, not revision
 
-[[ $(bc -l <<< "${version} <= 470.57") -eq 1 ]] && exit 0
+if [[ $(bc -l <<< "${version} < 470.57") -eq 1 ]]; then
+    echo "$0: NVIDIA graphics driver is older than 470.57, skipping..."
+    exit 0
+fi
 
 name=nvidia-vaapi-driver
 echo "building ${name}"
-echo "WARNING - You need Nvidia drivers > 470.57 installed for this to work"
-echo "Will install a new VAAPI driver called nvidia-nvdec alongside nvidia"
+echo "Will install a new VAAPI driver called nvdec alongside vdpau"
 
 mkdir -p builddir && cd builddir
 rm -fr ${name}
@@ -30,10 +32,19 @@ fi
 
 if [[ -d ${name} ]]; then
     mkdir -p ${name}/build && cd ${name}/build
-    LDFLAGS="-L/opt/nvidia/lib64 -L/opt/nvidia/lib" \
-    LIBRARY_PATH="/opt/nvidia/lib64:/opt/nvidia/lib" \
-    PKG_CONFIG_PATH="/usr/local/lib/pkgconfig" \
-    meson setup .. --prefix=/usr/local --libdir=lib && \
-    ninja install
+    mkdir -p /usr/local/lib/dri
+    install_dest=/usr/local/lib/dri/nvdec_drv_video.so
+
+    export LDFLAGS="-L/opt/nvidia/lib64 -L/opt/nvidia/lib"
+    export LIBRARY_PATH="/opt/nvidia/lib64:/opt/nvidia/lib"
+    export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig"
+
+    # Remove older copy, now renamed to nvdec_drv_video.so, so can co-exist
+    # with vdpau_drv_video.so.
+    rm -f /usr/local/lib/dri/nvidia_drv_video.so
+
+    meson setup .. --prefix=/usr/local --libdir=lib && ninja && \
+    /usr/bin/printf "Installing nvidia_drv_video.so to $install_dest\n" && \
+    cp -p nvidia_drv_video.so $install_dest
 fi
 
