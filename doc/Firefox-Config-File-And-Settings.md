@@ -19,11 +19,10 @@ export LIBVA_DRIVER_NAME=auto
 
 if [[ -d /opt/nvidia ]]
 then
-    # add /opt/nvidia/{lib64,lib} to path
+    # Add /opt/nvidia/{lib64,lib} to path.
     export LD_LIBRARY_PATH="/opt/nvidia/lib64:/opt/nvidia/lib:$LD_LIBRARY_PATH"
 
-    # libva doesn't yet know which driver to load for the nvidia-drm driver
-    # this forces libva to load the nvdec backend by default
+    # The NVDEC-backend driver works in x11 and Wayland.
     if [[ -f /usr/local/lib/dri/nvdec_drv_video.so ]]; then
         export LIBVA_DRIVER_NAME=nvdec
     else
@@ -33,6 +32,7 @@ fi
 
 if [[ $XDG_SESSION_TYPE == wayland ]]
 then
+    export EGL_PLATFORM=wayland
     export MOZ_ENABLE_WAYLAND=1
 else
     export MOZ_DISABLE_WAYLAND=1

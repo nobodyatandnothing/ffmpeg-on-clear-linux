@@ -9,13 +9,16 @@ Run [FFmpeg](https://ffmpeg.org/) on [Clear Linux](https://clearlinux.org/) incl
 * [Determining the VA-API driver to use](#va-api-driver)
 * [Firefox config file and settings](#firefox)
 * [Chromium and others installation](#chromium-and-others)
+* [High DPI support](#high-dpi-support)
 * [How can I make sure hardware acceleration is working?](#verify-acceleration)
 * [Watch HDR content](#watch-hdr-content)
 * [See also](#advert)
 
+Thank you, @xtknight for the initial [VP9](https://github.com/xtknight/vdpau-va-driver-vp9) acceleration bits. Likewise and thank you, @xuanruiqi for the [VP9-update](https://github.com/xuanruiqi/vdpau-va-driver-vp9) to include additional fixes. Finally, thank you @elFarto for the [NVDEC-enabled](https://github.com/elFarto/nvidia-vaapi-driver) driver. Both drivers can co-exist with few tweaks to the installation process.
+
 ### <a id="whats-included">What's included
 
-This is an automation **how-to** for building FFmpeg and minimum dependencies. My motivation is nothing more than wanting hardware acceleration during video playback. Who doesn't want that? Thank you, @xtknight for the initial [VP9](https://github.com/xtknight/vdpau-va-driver-vp9) acceleration bits. Thank you also, @xuanruiqi for the [VP9-update](https://github.com/xuanruiqi/vdpau-va-driver-vp9) to include additional fixes.
+This is an automation **how-to** for building FFmpeg and minimum dependencies. It builds two VA-API drivers for use with NVIDIA graphics.
 
 ```text
 bin        Browser launch scripts to be copied to $HOME/bin/.
@@ -125,11 +128,32 @@ See [guide](doc/Firefox-Config-File-And-Settings.md) in doc folder. Be sure to r
 
 ### <a id="chromium-and-others">Chromium and others installation
 
-See [guide](doc/Chromium-And-Others-Installation.md) in doc folder. This covers Chromium, Google Chrome, Vivaldi, and Brave.
+See [guide](doc/Chromium-And-Others-Installation.md) in doc folder. This covers Brave, Chromium, Google Chrome, and Vivaldi.
+
+### <a id="high-dpi-support">High DPI Support
+
+First, run gnome-tweaks and adjust "Fonts" > "Scaling Factor". Enter a floating value or press the `+` or `-` buttons until reaching the screen DPI divided by 96. For example, a 109 DPI screen divided by 96 equals 1.14 for the scaling factor rounded to 2 decimal places. That will update the `Xft.dpi` value, preferably matching the screen DPI. Subsequently, adjust the font size to 11 or 10 for "Interface Text", "Document Text", and "Legacy Window Titles"; size 13 or 12 for Monospace Text.
+
+```bash
+gnome-tweaks                       # as normal user
+xrdb -query                        # Xft.dpi: 109
+```
+
+The launch scripts for Chromium-based browsers set the scale-factor automatically, based on the `Xft.dpi` value. For Firefox, go to "about:config" and change the `layout.css.devPixelsPerPx` value manually. Start with 1.0 and increase-decrease in 0.01 increments or enter the value for `Xft.dpi` divided by 96. For example, 109 DPI / 96 = 1.135416667.
+
+```text
+layout.css.devPixelsPerPx          1.135416667
+```
+
+Firefox context-menus may not work in Wayland. Ensure the context-menu is working by right-clicking in the URL field. If the popup-menu is not sticking, then go to `about:config` and try decreasing or increasing the value (i.e. 1.0, 1.12, 1.25, 1.5, 2.0).
+
+```text
+layout.css.devPixelsPerPx          1.12
+```
 
 ### <a id="verify-acceleration">How can I make sure hardware acceleration is working?
 
-In Firefox, check the `about::support` page. In Chromium, Google Chrome, Vivaldi, and Brave, check the `chrome://gpu` page. Another way is running a utility suited for your hardware while watching a video.
+In Firefox, check the `about::support` page. In Brave, Chromium, Google Chrome, and Vivaldi, check the `chrome://gpu` page. Another way is running a utility suited for your hardware while watching a video.
 
 1. `watch -n 1 /opt/nvidia/bin/nvidia-smi` to check if "GPU-Util" percentage goes up
 2. `sudo intel_gpu_top` to check if percentage under the "Video" section goes up

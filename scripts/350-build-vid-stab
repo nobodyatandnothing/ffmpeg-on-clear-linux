@@ -1,6 +1,6 @@
 #!/bin/bash
 
-name=vid.stab
+name="vid.stab"
 echo "building ${name}"
 
 mkdir -p builddir && cd builddir

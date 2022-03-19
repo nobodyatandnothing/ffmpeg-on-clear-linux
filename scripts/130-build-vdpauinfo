@@ -3,7 +3,7 @@
 # Exit silently if the graphics driver is not installed.
 [[ ! -f /opt/nvidia/bin/nvidia-settings ]] && exit 0
 
-name=vdpauinfo
+name="vdpauinfo"
 echo "building ${name}"
 
 mkdir -p builddir && cd builddir

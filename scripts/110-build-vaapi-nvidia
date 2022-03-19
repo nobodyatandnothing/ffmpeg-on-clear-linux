@@ -13,7 +13,7 @@ if [[ $(bc -l <<< "${version} < 470.57") -eq 1 ]]; then
     exit 0
 fi
 
-name=nvidia-vaapi-driver
+name="nvidia-vaapi-driver"
 echo "building ${name}"
 echo "Will install a new VAAPI driver called nvdec alongside vdpau"
 

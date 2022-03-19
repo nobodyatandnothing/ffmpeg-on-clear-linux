@@ -9,9 +9,9 @@ This guide is for folks using the NVIDIA proprietary driver.
 
 ### <a id="requirements">Requirements
 
-Although testing was done using a NVIDIA GPU, the Intel(R) Media SDK is included during the build process. For NVIDIA graphics, this requires the proprietary driver to be installed under `/opt/nvidia`. Optionally install CUDA for extra hardware acceleration capabilities. See installation guides [NVIDIA Drivers](https://docs.01.org/clearlinux/latest/tutorials/nvidia.html) and [NVIDIA CUDA Toolkit](https://docs.01.org/clearlinux/latest/tutorials/nvidia-cuda.html) at Clear Linux.
+Although testing was done using a NVIDIA GPU, the Intel(R) Media SDK is included during the build process. For NVIDIA graphics, this requires the proprietary driver to be installed under `/opt/nvidia`. Optionally install CUDA for extra hardware acceleration capabilities in FFmpeg. See installation guides [NVIDIA Drivers](https://docs.01.org/clearlinux/latest/tutorials/nvidia.html) and [NVIDIA CUDA Toolkit](https://docs.01.org/clearlinux/latest/tutorials/nvidia-cuda.html) at Clear Linux.
 
-Set your GPU's [compute capability](https://en.wikipedia.org/wiki/CUDA) in `localenv`. The file resides at the top-level and is ignored by Git. For example, the GeForce GTX 1660 model supports max `7.5` compute capability. Omit this step is using a non-NVIDIA GPU.
+For CUDA, set your GPU's [compute capability](https://en.wikipedia.org/wiki/CUDA) in `localenv`. The file resides at the top-level and is ignored by Git. For example, the GeForce GTX 1660 model supports max `7.5` compute capability. Omit this step is using a non-NVIDIA GPU.
 
 ```text
 cudaarch="compute_75"  # Turing
@@ -19,6 +19,8 @@ cudacode="sm_75"
 ```
 
 Optionally enable `ForceCompositionPipeline` for a smoother desktop experience (no more stutters), especially when moving-resizing a terminal window while playing a video. This can be done at the device level; for example `/etc/X11/xorg.conf.d/nvidia-device.conf`.
+
+**Note:** Enable composition pipeline only if you experience stutters.
 
 ```bash
 sudo mkdir -p /etc/X11/xorg.conf.d
@@ -38,6 +40,8 @@ EOF
 
 Until CUDA reaches full compatibility with GCC 11.x, install the `c-extras-gcc10` bundle. This applies if `gcc --version` returns 11 or later. A flag will be passed to `nvcc` to use `gcc-10`.
 
+**Note:** The `000-install-dependencies` script now checks and installs the gcc10 bundle automatically.
+
 ```bash
 sudo swupd bundle-add c-extras-gcc10
 ```
@@ -46,7 +50,7 @@ sudo swupd bundle-add c-extras-gcc10
 
 The `swupd` tool is not yet mindful of the NVIDIA proprietary installation. Create a systemd service unit to overwrite the Clear Linux OS provided libGL files. The service accommodates the NVIDIA 64-bit libs residing in `/opt/nvidia/lib64` or `/opt/nvidia/lib`.
 
-Running `swupd bundle-add devpkg-libva` or `devpkg-mediasdk` or `devpkg-mesa` restores the Clear Linux OS provided libGL files which breaks the NVIDIA installation. The service removes libGL files that shouldn't be there i.e. `libEGL.so*`, `libGLESv1_CM.so*`, `libGLESv2.so*`, and `libGL.so*`.
+Why is the service needed? Running `swupd bundle-add devpkg-libva`, `devpkg-mediasdk`, or `devpkg-mesa` restores the Clear Linux OS provided libGL files which breaks the NVIDIA installation. The service removes libGL files that shouldn't be there (i.e. `libEGL.so*`, `libGLESv1_CM.so*`, `libGLESv2.so*`, and `libGL.so*`), removed during the proprietary installation.
 
 ```bash
 sudo tee /etc/systemd/system/fix-nvidia-libGL-trigger.service >/dev/null <<'EOF'

@@ -14,22 +14,33 @@ export FONTCONFIG_PATH=/usr/share/defaults/fonts
 export LIBVA_DRIVERS_PATH=/usr/lib64/dri
 export LIBVA_DRIVER_NAME=auto
 
-if [[ -d /opt/nvidia && -f $LIBVA_DRIVERS_PATH/nvidia_drv_video.so ]]
+if [[ -d /opt/nvidia && -f $LIBVA_DRIVERS_PATH/vdpau_drv_video.so ]]
 then
-    # add /opt/nvidia/{lib64,lib} to path
+    # Add /opt/nvidia/{lib64,lib} to path.
     export LD_LIBRARY_PATH="/opt/nvidia/lib64:/opt/nvidia/lib"
 
-    # libva doesn't yet know which driver to load for the nvidia-drm driver
-    # this forces libva to load the nvidia backend
+    # The VDPAU-backend driver works in x11 only.
     export LIBVA_DRIVER_NAME=vdpau
 fi
 
 [[ $XDG_SESSION_TYPE == wayland ]] && GL=egl || GL=desktop
 
-exec "$EXECCMD" --window-size=1211,1000 \
+SCALE_FACTOR=$(
+    xrdb -query Xft.dpi | awk '/^Xft.dpi:/ {
+        dpi = $2; if (dpi % 2) dpi += 1
+        printf("%.9f", dpi / 96)
+    }'
+)
+
+# Do not enable #ignore-gpu-blocklist for NVIDIA graphics.
+# It may cause extra CPU utilization in Wayland, during video playback.
+
+exec "$EXECCMD" --window-size=1214,1000 \
+    --high-dpi-support=1 --force-device-scale-factor=$SCALE_FACTOR \
     --disable-features=UseChromeOSDirectVideoDecoder \
+    --disable-font-subpixel-positioning --disable-gpu-vsync \
     --disable-gpu-driver-bug-workarounds --enable-zero-copy \
     --enable-accelerated-2d-canvas --enable-smooth-scrolling \
     --enable-features=VaapiVideoDecoder,CanvasOopRasterization \
-    --use-gl=$GL --use-vulkan --disable-gpu-vsync $* &> /dev/null &
+    --enable-gpu-rasterization --use-gl=$GL $* &> /dev/null &
 

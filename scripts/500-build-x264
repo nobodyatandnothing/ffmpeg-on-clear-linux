@@ -1,6 +1,6 @@
 #!/bin/bash
 
-name=x264
+name="x264"
 echo "building ${name}"
 
 mkdir -p builddir && cd builddir

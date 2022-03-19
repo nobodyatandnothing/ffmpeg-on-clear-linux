@@ -18,6 +18,7 @@ for bundle_name in \
     devpkg-mesa devpkg-numactl devpkg-opus devpkg-pulseaudio      \
     devpkg-SDL2 devpkg-SDL2_gfx devpkg-SDL2_image devpkg-SDL2_net \
     devpkg-SDL2_ttf devpkg-speex devpkg-v4l-utils devpkg-zlib     \
+    curl unzip                                                    \
 ;do
     if [[ ! ${installed_bundles} =~ " - ${bundle_name} " ]]; then
         add_list="${add_list} ${bundle_name}"
@@ -49,6 +50,19 @@ if [[ -n ${add_list} ]]; then
     add_list=${add_list## } # remove leading whitespace
     echo "swupd bundle-add ${add_list}"
     swupd bundle-add ${add_list}
+fi
+
+# Add gcc10 if the NVIDIA CUDA Toolkit is present.
+if [[ -f /usr/local/cuda/include/cuda.h ]]; then
+    gccver=$( gcc --version | awk '{ printf("%.0f\n", $8); exit }' )
+    if [[ $gccver -gt 10 ]]; then
+        if [[ ! ${installed_bundles} =~ " - c-extras-gcc10 " ]]; then
+            echo "swupd bundle-add c-extras-gcc10"
+            swupd bundle-add c-extras-gcc10
+        else
+            count=$(( ${count} + 1 ))
+        fi
+    fi
 fi
 
 if [[ ${count} -gt 0 ]]; then

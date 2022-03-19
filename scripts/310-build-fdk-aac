@@ -1,6 +1,6 @@
 #!/bin/bash
 
-name=fdk-aac
+name="fdk-aac"
 echo "building ${name}"
 
 mkdir -p builddir && cd builddir

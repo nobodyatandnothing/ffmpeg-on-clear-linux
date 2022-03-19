@@ -1,6 +1,6 @@
 #!/bin/bash
 
-name=SVT-AV1
+name="SVT-AV1"
 echo "building ${name}"
 
 mkdir -p builddir && cd builddir
