@@ -1,16 +1,15 @@
 #!/bin/bash
 
 name="aom"
-branch="v3.3.0"
-echo "building ${name} branch ${branch}"
+echo "building ${name}"
 
 mkdir -p builddir && cd builddir
 rm -fr ${name} ${name}_build
 
 if [[ ! -f ${name}.tar.gz ]]; then
     url="https://aomedia.googlesource.com/aom"
-    echo "git clone --depth 1 --branch ${branch} ${url}"
-    git clone --depth 1 --branch ${branch} ${url}
+    echo "git clone --depth 1 ${url}"
+    git clone --depth 1 ${url}
     tar czf ${name}.tar.gz ${name}
 else
     tar xzf ${name}.tar.gz
@@ -25,6 +24,8 @@ if [[ -d ${name} ]]; then
     mkdir -p ${name}_build && cd ${name}_build
     export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
     export LD_LIBRARY_PATH=/usr/local/lib
+    export CXXFLAGS="$CXXFLAGS -flto=auto -ffat-lto-objects -fuse-linker-plugin"
+    export CFLAGS="$CFLAGS -flto=auto -ffat-lto-objects -fuse-linker-plugin"
     cmake -G Ninja \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
         -DCMAKE_INSTALL_LIBDIR=lib \
@@ -34,7 +35,7 @@ if [[ -d ${name} ]]; then
         -DCONFIG_SHARED=1 \
         -DCONFIG_ANALYZER=0 \
         -DENABLE_DOCS=0 \
-        -DENABLE_EXAMPLES=0 \
+        -DENABLE_EXAMPLES=1 \
         -DENABLE_NASM=1 \
         -DENABLE_TESTS=0 \
         -DENABLE_TOOLS=0 \
