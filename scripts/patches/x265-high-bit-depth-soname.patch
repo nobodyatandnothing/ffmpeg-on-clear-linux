@@ -1,0 +1,32 @@
+diff -u source/CMakeLists.txt.orig source/CMakeLists.txt
+--- source/CMakeLists.txt.orig  2021-03-16 07:53:00.000000000 -0500
++++ source/CMakeLists.txt       2022-06-06 10:25:24.507412591 -0500
+@@ -656,7 +656,15 @@
+     if(MSVC)
+         set_target_properties(x265-shared PROPERTIES OUTPUT_NAME libx265)
+     else()
+-        set_target_properties(x265-shared PROPERTIES OUTPUT_NAME x265)
++        if(HIGH_BIT_DEPTH)
++            if(MAIN12)
++                set_target_properties(x265-shared PROPERTIES OUTPUT_NAME x265_main12)
++            else()
++                set_target_properties(x265-shared PROPERTIES OUTPUT_NAME x265_main10)
++            endif()
++        else()
++            set_target_properties(x265-shared PROPERTIES OUTPUT_NAME x265)
++        endif(HIGH_BIT_DEPTH)
+     endif()
+     if(UNIX)
+         set_target_properties(x265-shared PROPERTIES VERSION ${X265_BUILD})
+diff -u source/encoder/api.cpp.orig source/encoder/api.cpp
+--- source/encoder/api.cpp.orig 2021-03-16 07:53:00.000000000 -0500
++++ source/encoder/api.cpp      2022-06-06 10:22:59.772061374 -0500
+@@ -1089,7 +1089,7 @@
+ #define ext ".dylib"
+ #else
+ #include <dlfcn.h>
+-#define ext ".so"
++#define ext ".so" xstr(X265_BUILD)
+ #endif
+ #if defined(__GNUC__) && __GNUC__ >= 8
+ #pragma GCC diagnostic ignored "-Wcast-function-type"

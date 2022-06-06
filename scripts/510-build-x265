@@ -22,6 +22,10 @@ if [[ -d ${name}_${version} ]]; then
     # Fix for ENABLE_PIC.
     sed -i 's/-fPIC/-fPIC -DPIC/' source/CMakeLists.txt
 
+    # Multilib support; copy api.cpp, restored later.
+    cp source/encoder/api.cpp source/encoder/api.cpp.orig
+    patch -p0 < ../../patches/x265-high-bit-depth-soname.patch || exit $?
+
     echo "Building the ${name} 12-bit shared library..."
     mkdir -p 12bit && cd 12bit
 
@@ -31,12 +35,6 @@ if [[ -d ${name}_${version} ]]; then
         -DENABLE_CLI=0 -DHIGH_BIT_DEPTH=1 -DMAIN12=1 ../source && \
     ninja || exit $?
     ninja install || exit $?
-
-    version=`ls -1tr /usr/local/lib/libx265.so.* | tail -1 | cut -f3 -d.`
-    rm -f /usr/local/lib/libx265.so /usr/local/lib/libx265.a
-    mv -f /usr/local/lib/libx265.so.$version /usr/local/lib/libx265_main12.so.$version
-    pushd /usr/local/lib && ln -sf libx265_main12.so.$version libx265_main12.so && popd
-    unset version
 
     echo "Building the ${name} 10-bit shared library..."
     cd .. && mkdir -p 10bit && cd 10bit
@@ -48,14 +46,11 @@ if [[ -d ${name}_${version} ]]; then
     ninja || exit $?
     ninja install || exit $?
 
-    version=`ls -1tr /usr/local/lib/libx265.so.* | tail -1 | cut -f3 -d.`
-    rm -f /usr/local/lib/libx265.so /usr/local/lib/libx265.a
-    mv -f /usr/local/lib/libx265.so.$version /usr/local/lib/libx265_main10.so.$version
-    pushd /usr/local/lib && ln -sf libx265_main10.so.$version libx265_main10.so && popd
-    unset version
-
     echo "Building the ${name} 8-bit shared library and cli tools..."
     cd .. && mkdir -p 8bit && cd 8bit
+
+    # Restore api.cpp for the 8-bit build.
+    cp ../source/encoder/api.cpp.orig ../source/encoder/api.cpp
 
     cmake -Wno-dev -G Ninja -DCMAKE_POSITION_INDEPENDENT_CODE=1 \
         -DCMAKE_SKIP_RPATH:BOOL=YES -DCMAKE_INSTALL_PREFIX=/usr/local \
