@@ -39,7 +39,7 @@ Important, see [guide](doc/NV-Requirements-And-Preparation.md) in doc folder if 
 The build and installation process is fully automatic.
 
 ```bash
-git clone https://github.com/marioroy/ffmpeg-on-clear-linux.git
+git clone https://github.com/marioroy/ffmpeg-on-clear-linux
 cd ffmpeg-on-clear-linux
 sudo bash build-all
 ```
